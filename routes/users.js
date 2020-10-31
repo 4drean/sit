@@ -1,17 +1,41 @@
 var express = require('express');
+const {route, use}=require('.');
 var router = express.Router();
-
-/* GET users listing. */
+const User = require('../model/user');
+const Sug =require('../model/form');
+/* GET home page. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
-router.post("/login", function(req, res, next) {
+
+router.post('/Sug',function  (req,res, next ){
+  console.log(req.body);
+  let sug =new Sug({
+    correo: req.body.correo,
+    sexo: req.body.sexo,
+    sugerencia: req.body.sugerencia
+  });
  
-  var user = new User({
-      email: req.body.email,
+ 
+  //Guarda un registro en Mongo
+  sug.save((err, response) => {
+      if (err) res.status(400).send(err);
+      res.status(200).send(response);
+      
+  });
+  res.redirect('/');
+});
+
+/*  LOGIN */
+
+router.post("/login", function(req, res, next) {
+  console.log(req.body);
+  let user=new User({
+    email: req.body.email,
       password: req.body.password
   });
-
+ 
+ 
   //Guarda un registro en Mongo
   user.save((err, response) => {
       if (err) res.status(400).send(err);

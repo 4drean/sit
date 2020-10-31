@@ -3,13 +3,14 @@
 <head>
     <%- include('partials/navbar'); %>
     <%- include('partials/head'); %>
+  
     <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
     <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css"/>
 
     <script type="text/javascript">
       window.onload = function() {
         L.mapquest.key = 'GrGhhZ7bqifQHdC00kDZMufCZ95US7uo';
-
+        var baseLayer = L.mapquest.tileLayer('map');
     
         L.mapquest.geocoding().geocode('1 SW Bowerman Dr, Beaverton, OR 97006, Estados Unidos', createMap);
 
@@ -18,14 +19,45 @@
           var latLng = location.displayLatLng;
           var map = L.mapquest.map('map', {
             center: latLng,
-            layers: L.mapquest.tileLayer('dark'),
+            layers: L.mapquest.tileLayer('hybrid'),
             zoom: 13
           });
+          L.control.layers({
+          'Map': baseLayer,
+          'Hybrid': L.mapquest.tileLayer('hybrid'),
+          'Satellite': L.mapquest.tileLayer('satellite'),
+          'Light': L.mapquest.tileLayer('light'),
+          'Dark': L.mapquest.tileLayer('dark')
+        }).addTo(map);
+        
+        
+
+        var customPopup = L.popup({ closeButton: false })
+        .setLatLng(latLng)
+            .setContent('<strong>' + location.adminArea5 + ', ' + location.adminArea3 + '</strong> is located here.')
+            .openOn(map);
         }
-        map.addLayer(L.mapquest.trafficLayer());
-        map.addLayer(L.mapquest.incidentsLayer());
-        map.addLayer(L.mapquest.marketsLayer());
+        
+        
+        L.control.zoom({
+          position: 'topright'
+        }).addTo(map);
+
+        L.mapquest.directionsControl({
+          routeSummary: {
+            enabled: false
+          },
+          narrativeControl: {
+            enabled: true,
+            compactResults: false
+          }
+        }).addTo(map);
+      
       }
+      
+     
+      
+  
       
     </script>
   </head>
@@ -73,7 +105,7 @@
                   </div>
                 </div>
               </div>
-
+  <h2>Puede modificar el estilo del mapa.</h2>
             <div id="map" style="width: 100%; height: 530px;"></div>
         <div>
             

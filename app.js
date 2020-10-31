@@ -3,19 +3,25 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-//var InitiateMongoServer=requiere("./config/db");
-//var bodyParser=requiere('body-parser');
+var InitiateMongoServer = require("./config/db");
+var bodyParser = require('body-parser');
+
 
 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var pistaRouter = require('./routes/pista');
+var formRouter = require('./routes/form');
+
 
 
 var pinterestRouter = require('./routes/pinterest');
 var mimusicaRouter = require('./routes/mimusica');
 var covidRouter = require('./routes/covid');
+var ventaRouter = require('./routes/venta');
+var yourserversidecodeRouter = require('./routes/your-server-side-code');
+
 
 
 
@@ -23,8 +29,8 @@ var covidRouter = require('./routes/covid');
 
 var app = express();
 
-//InitiateMongoServer();
-//app.use(bodyParser.json());
+InitiateMongoServer();
+app.use(bodyParser.json());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -43,6 +49,11 @@ app.use('/pista', pistaRouter);
 app.use('/pinterest', pinterestRouter);
 app.use('/mimusica', mimusicaRouter);
 app.use('/covid', covidRouter);
+app.use('/venta', ventaRouter);
+app.use('/your-server-side-code', yourserversidecodeRouter);
+app.use('/form', formRouter);
+
+
 
 
 
